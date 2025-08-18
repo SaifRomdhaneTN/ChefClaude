@@ -15,7 +15,10 @@ export default function MainSection() {
     }
 
 
-
+    function clearAll(){
+        setCurrentIngredients([])
+        setRecipe('')
+    }
     const [recipe, setRecipe] = React.useState("");
      async function getRecipe() {
          const apiResponse = await getRecipeFromMistral(currentIngredients)
@@ -33,7 +36,12 @@ export default function MainSection() {
                 />
                 <button>Add Ingredient</button>
             </form>
-            {currentIngredients.length ? <IngredientList ingredientsListItems={ingredientsListItems}currentIngredients={currentIngredients} getRecipe={getRecipe} />: null}
+            {currentIngredients.length ?
+                <>
+                <IngredientList ingredientsListItems={ingredientsListItems}currentIngredients={currentIngredients} getRecipe={getRecipe} />
+                <button id="clearButton" onClick={clearAll}>Clear All</button>
+                </>
+                : null}
             {recipe && <ClaudeRecipe  recipe={recipe}/>}
         </main>
     )
