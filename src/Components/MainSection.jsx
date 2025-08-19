@@ -6,6 +6,7 @@ export default function MainSection() {
 
 
     const [currentIngredients, setCurrentIngredients] = React.useState([]);
+    const recipeSection = React.useRef(null);
     const ingredientsListItems = currentIngredients.map(ingredient => (
         <li key={ingredient}>{ingredient}</li>
     ))
@@ -20,6 +21,11 @@ export default function MainSection() {
         setRecipe('')
     }
     const [recipe, setRecipe] = React.useState("");
+
+    React.useEffect(() => {
+        if (recipeSection.current != null
+        )recipeSection.current.scrollIntoView({behavior: "smooth"});
+    },[recipe])
      async function getRecipe() {
          const apiResponse = await getRecipeFromMistral(currentIngredients)
          setRecipe(apiResponse)
@@ -38,7 +44,7 @@ export default function MainSection() {
             </form>
             {currentIngredients.length ?
                 <>
-                <IngredientList ingredientsListItems={ingredientsListItems}currentIngredients={currentIngredients} getRecipe={getRecipe} />
+                <IngredientList ref={recipeSection} ingredientsListItems={ingredientsListItems}currentIngredients={currentIngredients} getRecipe={getRecipe} />
                 <button id="clearButton" onClick={clearAll}>Clear All</button>
                 </>
                 : null}
